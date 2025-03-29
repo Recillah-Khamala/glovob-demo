@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get "user_profiles/show"
+      get "user_profiles/update"
       namespace :auth do
+        get "sessions/create"
+        get "sessions/destroy"
         get "registrations/create"
       end
     end
