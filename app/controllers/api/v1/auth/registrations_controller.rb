@@ -19,6 +19,9 @@ module Api
               }
             }, status: :created
           else
+            Rails.logger.error "User registration failed: #{user.errors.full_messages}"
+            Rails.logger.error "Parameters received: #{user_params.inspect}"
+            
             render json: {
               status: 'error',
               message: 'User registration failed',
@@ -30,7 +33,7 @@ module Api
         private
 
         def user_params
-          params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
+          params.require(:user).permit(:email, :password, :password_confirmation)
         end
       end
     end
