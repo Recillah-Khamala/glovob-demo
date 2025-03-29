@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # Auth routes
       namespace :auth do
+        post 'check_user', to: 'sessions#check_user'  # Add this line
         post 'signup', to: 'registrations#create'
         post 'login', to: 'sessions#create'
         delete 'logout', to: 'sessions#destroy'
