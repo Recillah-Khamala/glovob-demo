@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*'  # In production, replace with your frontend domain
+    origins 'http://localhost:5173' # Your frontend URL
 
     resource '*',
       headers: :any,

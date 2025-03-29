@@ -2,16 +2,24 @@
 
 one:
   user: one
-  street: MyString
-  city: MyString
-  state: MyString
-  postal_code: MyString
-  country: MyString
+  street: 123 Main Street
+  city: New York
+  state: NY
+  postal_code: 10001
+  country: United States
+  building_or_estate_name: Empire State Building
+  house_number_or_name: Suite 100
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
 
 two:
-  user: two
-  street: MyString
-  city: MyString
-  state: MyString
-  postal_code: MyString
-  country: MyString
+  user: one
+  street: 456 Park Avenue
+  city: New York
+  state: NY
+  postal_code: 10022
+  country: United States
+  building_or_estate_name: Park Avenue Tower
+  house_number_or_name: Apt 5B
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
