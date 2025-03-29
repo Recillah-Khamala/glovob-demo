@@ -7,11 +7,13 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:5173' # Your frontend URL
+    origins 'http://localhost:3001', 'http://localhost:5173'  # Allow both common frontend ports
 
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
-      expose: ['Authorization']
+      expose: ['Authorization'],
+      credentials: true,
+      max_age: 600  # Cache preflight requests for 10 minutes
   end
 end
