@@ -43,10 +43,48 @@ module Api
           end
         end
 
+        def complete_registration
+          user = User.find_by(email: user_params[:email])
+          
+          if user.nil?
+            render json: {
+              status: 'error',
+              message: 'User not found',
+              errors: ['User not found']
+            }, status: :not_found
+            return
+          end
+
+          if user.update(complete_registration_params)
+            render json: {
+              status: 'success',
+              message: 'Registration completed successfully',
+              data: {
+                user: {
+                  id: user.id,
+                  email: user.email,
+                  first_name: user.first_name,
+                  last_name: user.last_name
+                }
+              }
+            }
+          else
+            render json: {
+              status: 'error',
+              message: 'Failed to complete registration',
+              errors: user.errors.full_messages
+            }, status: :unprocessable_entity
+          end
+        end
+
         private
 
         def user_params
           params.require(:user).permit(:email, :password, :password_confirmation, :registration_step)
+        end
+
+        def complete_registration_params
+          params.require(:user).permit(:first_name, :last_name, :name)
         end
       end
     end

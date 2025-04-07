@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       namespace :auth do
         post 'check_user', to: 'sessions#check_user'  # Add this line
         post 'signup', to: 'registrations#create'
+        post 'complete_registration', to: 'registrations#complete_registration'
         post 'login', to: 'sessions#create'
         delete 'logout', to: 'sessions#destroy'
       end
