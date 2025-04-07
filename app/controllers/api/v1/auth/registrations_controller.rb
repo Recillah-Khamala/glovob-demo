@@ -44,7 +44,20 @@ module Api
         end
 
         def complete_registration
-          user = User.find_by(email: user_params[:email])
+          # Extract email from the nested user params and convert to lowercase
+          email = params.dig(:user, :email)&.downcase
+          
+          if email.blank?
+            render json: {
+              status: 'error',
+              message: 'Email is required',
+              errors: ['Email is required']
+            }, status: :unprocessable_entity
+            return
+          end
+
+          # Find user with case-insensitive email
+          user = User.where('LOWER(email) = ?', email).first
           
           if user.nil?
             render json: {
@@ -63,8 +76,7 @@ module Api
                 user: {
                   id: user.id,
                   email: user.email,
-                  first_name: user.first_name,
-                  last_name: user.last_name
+                  first_name: user.first_name
                 }
               }
             }
@@ -84,7 +96,7 @@ module Api
         end
 
         def complete_registration_params
-          params.require(:user).permit(:first_name, :last_name, :name)
+          params.require(:user).permit(:first_name)
         end
       end
     end
