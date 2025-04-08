@@ -3,10 +3,15 @@ module Api
     module Auth
       class SessionsController < ApplicationController
         def create
-          user = User.find_by(email: params[:email])
+          # Extract email and password from the nested structure
+          email = params.dig(:user, :email) || params.dig(:session, :user, :email)
+          password = params.dig(:user, :password) || params.dig(:session, :user, :password)
           
-          if user&.valid_password?(params[:password])
-            sign_in user
+          user = User.find_by(email: email)
+          
+          if user&.valid_password?(password)
+            # Use warden to sign in the user
+            warden.set_user(user)
             render json: {
               status: 'success',
               message: 'Logged in successfully',
@@ -29,7 +34,7 @@ module Api
 
         def destroy
           if current_user
-            sign_out current_user
+            warden.logout
             render json: {
               status: 'success',
               message: 'Logged out successfully'
@@ -43,7 +48,8 @@ module Api
         end
 
         def check_user
-          user = User.find_by(email: params[:email])
+          email = params[:email] || params.dig(:session, :email)
+          user = User.find_by(email: email)
           render json: { exists: user.present? }
         rescue => e
           render json: { error: e.message }, status: :internal_server_error

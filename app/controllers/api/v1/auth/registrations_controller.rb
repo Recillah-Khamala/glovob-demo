@@ -96,7 +96,7 @@ module Api
         end
 
         def complete_registration_params
-          params.require(:user).permit(:first_name)
+          params.require(:user).permit(:first_name, :email)
         end
       end
     end
