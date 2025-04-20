@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 
       # Addresses routes
       resources :addresses, only: [:index, :create, :update, :destroy]
+
+      # Restaurants routes
+      resources :restaurants, only: [:index, :show, :create, :update, :destroy]
     end
   end
 
