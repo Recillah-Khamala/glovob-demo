@@ -25,6 +25,9 @@ Rails.application.routes.draw do
 
       # Restaurants routes
       resources :restaurants, only: [:index, :show, :create, :update, :destroy]
+
+      # Categories routes
+      resources :categories, only: [:index]
     end
   end
 
