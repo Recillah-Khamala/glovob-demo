@@ -36,6 +36,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_132211) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "restaurants", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "image_url", null: false
+    t.decimal "rating", precision: 2, scale: 1
+    t.string "delivery_time"
+    t.string "price_range"
+    t.string "categories", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
