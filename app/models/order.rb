@@ -2,7 +2,7 @@ class Order < ApplicationRecord
   belongs_to :user
   belongs_to :office
 
-  enum status: {
+  enum :status, {
     pending: 0,
     picked: 1,
     in_transit: 2,

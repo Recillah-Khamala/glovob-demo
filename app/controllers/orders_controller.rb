@@ -19,6 +19,10 @@ class OrdersController < ApplicationController
 
   # PATCH /orders/:id/status
   def update_status
+    unless Order.statuses.key?(params[:status])
+      return render json: { errors: ["'#{params[:status]}' is not a valid status"] }, status: :unprocessable_entity
+    end
+
     if @order.update(status: params[:status])
       render json: @order, status: :ok
     else
