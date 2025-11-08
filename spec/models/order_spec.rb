@@ -1,0 +1,55 @@
+require 'rails_helper'
+
+RSpec.describe Order, type: :model do
+  describe 'associations' do
+    it { should belong_to(:user) }
+    it { should belong_to(:office) }
+  end
+
+  describe 'enums' do
+    it { should define_enum_for(:status).with_values(pending: 0, picked: 1, in_transit: 2, delivered: 3) }
+  end
+
+  describe 'validations' do
+    subject { build(:order) }
+
+    it { should validate_presence_of(:package_description) }
+    it { should validate_length_of(:package_description).is_at_least(5).is_at_most(1000) }
+
+    it { should validate_presence_of(:weight) }
+    it { should validate_numericality_of(:weight).is_greater_than(0).is_less_than_or_equal_to(1000) }
+
+    it { should validate_presence_of(:delivery_address) }
+    it { should validate_length_of(:delivery_address).is_at_least(10).is_at_most(500) }
+
+    it { should validate_presence_of(:status) }
+    it { should validate_presence_of(:tracking_code) }
+    it { should validate_uniqueness_of(:tracking_code) }
+
+    it { should validate_numericality_of(:estimated_cost).is_greater_than_or_equal_to(0).allow_nil }
+    it { should validate_numericality_of(:estimated_time).is_greater_than(0).allow_nil }
+  end
+
+  describe 'callbacks' do
+    it 'generates a tracking code before validation on create' do
+      order = build(:order, tracking_code: nil)
+      order.valid?
+      expect(order.tracking_code).to be_present
+      expect(order.tracking_code).to start_with('GLV')
+      expect(order.tracking_code.length).to eq(11) # GLV + 8 characters
+    end
+
+    it 'does not override an existing tracking code' do
+      order = build(:order, tracking_code: 'CUSTOM123')
+      order.valid?
+      expect(order.tracking_code).to eq('CUSTOM123')
+    end
+  end
+
+  describe 'factory' do
+    it 'has a valid factory' do
+      expect(build(:order)).to be_valid
+    end
+  end
+end
+
