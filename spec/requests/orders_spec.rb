@@ -97,10 +97,10 @@ RSpec.describe 'Orders API', type: :request do
       end
 
       it 'allows status transitions' do
-        patch "/orders/#{order.id}/status", params: { status: 'in_transit' }
+        patch "/api/v1/orders/#{order.id}/status", params: { status: 'in_transit' }
         expect(response).to have_http_status(:ok)
         
-        patch "/orders/#{order.id}/status", params: { status: 'delivered' }
+        patch "/api/v1/orders/#{order.id}/status", params: { status: 'delivered' }
         expect(response).to have_http_status(:ok)
         expect(order.reload.status).to eq('delivered')
       end
