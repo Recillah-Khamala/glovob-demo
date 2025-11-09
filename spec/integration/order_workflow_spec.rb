@@ -19,7 +19,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
         }
       }
 
-      post '/orders', params: order_params
+      post '/api/v1/orders', params: order_params
       expect(response).to have_http_status(:created)
       
       json_response = JSON.parse(response.body)
@@ -30,7 +30,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
       expect(json_response['status']).to eq('pending')
 
       # Step 2: Retrieve the order
-      get "/orders/#{order_id}"
+      get "/api/v1/orders/#{order_id}"
       expect(response).to have_http_status(:ok)
       
       json_response = JSON.parse(response.body)
@@ -38,7 +38,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
       expect(json_response['tracking_code']).to eq(tracking_code)
 
       # Step 3: Update status to picked
-      patch "/orders/#{order_id}/status", params: { status: 'picked' }
+        patch "/api/v1/orders/#{order_id}/status", params: { status: 'picked' }
       expect(response).to have_http_status(:ok)
       
       json_response = JSON.parse(response.body)
@@ -59,7 +59,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
       expect(json_response['status']).to eq('delivered')
 
       # Step 6: Verify order appears in user's order history
-      get "/users/#{user.id}/orders"
+      get "/api/v1/users/#{user.id}/orders"
       expect(response).to have_http_status(:ok)
       
       json_response = JSON.parse(response.body)
@@ -76,7 +76,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
       order = create(:order, user: user, office: office)
 
       # Get the order
-      get "/orders/#{order.id}"
+      get "/api/v1/orders/#{order.id}"
       expect(response).to have_http_status(:ok)
       
       json_response = JSON.parse(response.body)
@@ -84,7 +84,7 @@ RSpec.describe 'Order Workflow Integration', type: :request do
       expect(json_response['office']['name']).to eq('Test Office')
 
       # Get the office directly
-      get "/offices/#{office.id}"
+      get "/api/v1/offices/#{office.id}"
       expect(response).to have_http_status(:ok)
       
       json_response = JSON.parse(response.body)

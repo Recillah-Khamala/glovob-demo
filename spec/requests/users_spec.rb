@@ -4,13 +4,13 @@ RSpec.describe 'Users API', type: :request do
   let(:user) { create(:user) }
   let(:office) { create(:office) }
 
-  describe 'GET /users/:id/orders' do
+  describe 'GET /api/v1/users/:id/orders' do
     let!(:order1) { create(:order, user: user, office: office) }
     let!(:order2) { create(:order, user: user, office: office) }
     let!(:other_user_order) { create(:order, office: office) }
 
     it 'returns all orders for a specific user' do
-      get "/users/#{user.id}/orders"
+      get "/api/v1/users/#{user.id}/orders"
       
       expect(response).to have_http_status(:ok)
       json_response = JSON.parse(response.body)
@@ -19,7 +19,7 @@ RSpec.describe 'Users API', type: :request do
     end
 
     it 'does not return orders from other users' do
-      get "/users/#{user.id}/orders"
+      get "/api/v1/users/#{user.id}/orders"
       
       json_response = JSON.parse(response.body)
       order_ids = json_response.map { |o| o['id'] }
@@ -27,7 +27,7 @@ RSpec.describe 'Users API', type: :request do
     end
 
     it 'returns orders ordered by created_at desc' do
-      get "/users/#{user.id}/orders"
+      get "/api/v1/users/#{user.id}/orders"
       
       json_response = JSON.parse(response.body)
       expect(json_response.first['id']).to eq(order2.id)
@@ -35,7 +35,7 @@ RSpec.describe 'Users API', type: :request do
     end
 
     it 'returns 404 for non-existent user' do
-      get '/users/99999/orders'
+      get '/api/v1/users/99999/orders'
       
       expect(response).to have_http_status(:not_found)
       json_response = JSON.parse(response.body)
@@ -44,7 +44,7 @@ RSpec.describe 'Users API', type: :request do
 
     it 'returns empty array for user with no orders' do
       new_user = create(:user)
-      get "/users/#{new_user.id}/orders"
+      get "/api/v1/users/#{new_user.id}/orders"
       
       expect(response).to have_http_status(:ok)
       json_response = JSON.parse(response.body)

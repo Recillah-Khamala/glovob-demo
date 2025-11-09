@@ -4,7 +4,7 @@ RSpec.describe 'Orders API', type: :request do
   let(:user) { create(:user) }
   let(:office) { create(:office) }
 
-  describe 'POST /orders' do
+  describe 'POST /api/v1/orders' do
     let(:valid_params) do
       {
         order: {
@@ -34,7 +34,7 @@ RSpec.describe 'Orders API', type: :request do
     context 'with valid parameters' do
       it 'creates a new order' do
         expect {
-          post '/orders', params: valid_params
+          post '/api/v1/orders', params: valid_params
         }.to change(Order, :count).by(1)
 
         expect(response).to have_http_status(:created)
@@ -44,7 +44,7 @@ RSpec.describe 'Orders API', type: :request do
       end
 
       it 'generates a tracking code automatically' do
-        post '/orders', params: valid_params
+        post '/api/v1/orders', params: valid_params
         
         json_response = JSON.parse(response.body)
         expect(json_response['tracking_code']).to start_with('GLV')
@@ -53,7 +53,7 @@ RSpec.describe 'Orders API', type: :request do
 
     context 'with invalid parameters' do
       it 'returns unprocessable entity status' do
-        post '/orders', params: invalid_params
+        post '/api/v1/orders', params: invalid_params
         
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -62,11 +62,11 @@ RSpec.describe 'Orders API', type: :request do
     end
   end
 
-  describe 'GET /orders/:id' do
+  describe 'GET /api/v1/orders/:id' do
     let!(:order) { create(:order, user: user, office: office) }
 
     it 'returns order details' do
-      get "/orders/#{order.id}"
+      get "/api/v1/orders/#{order.id}"
       
       expect(response).to have_http_status(:ok)
       json_response = JSON.parse(response.body)
@@ -75,7 +75,7 @@ RSpec.describe 'Orders API', type: :request do
     end
 
     it 'returns 404 for non-existent order' do
-      get '/orders/99999'
+      get '/api/v1/orders/99999'
       
       expect(response).to have_http_status(:not_found)
       json_response = JSON.parse(response.body)
@@ -83,12 +83,12 @@ RSpec.describe 'Orders API', type: :request do
     end
   end
 
-  describe 'PATCH /orders/:id/status' do
+  describe 'PATCH /api/v1/orders/:id/status' do
     let!(:order) { create(:order, user: user, office: office, status: :pending) }
 
     context 'with valid status' do
       it 'updates order status' do
-        patch "/orders/#{order.id}/status", params: { status: 'picked' }
+        patch "/api/v1/orders/#{order.id}/status", params: { status: 'picked' }
         
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)
@@ -108,7 +108,7 @@ RSpec.describe 'Orders API', type: :request do
 
     context 'with invalid status' do
       it 'returns unprocessable entity' do
-        patch "/orders/#{order.id}/status", params: { status: 'invalid_status' }
+        patch "/api/v1/orders/#{order.id}/status", params: { status: 'invalid_status' }
         
         expect(response).to have_http_status(:unprocessable_entity)
       end
