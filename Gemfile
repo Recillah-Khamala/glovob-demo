@@ -54,7 +54,7 @@ end
 
 group :test do
   # RSpec for testing
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 8.0"
   # FactoryBot for test data generation
   gem "factory_bot_rails", "~> 6.2"
   # Faker for generating fake data
