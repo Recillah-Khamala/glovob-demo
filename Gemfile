@@ -60,5 +60,5 @@ group :test do
   # Faker for generating fake data
   gem "faker", "~> 3.0"
   # Shoulda matchers for cleaner model specs
-  gem "shoulda-matchers", "~> 6.0"
+  gem "shoulda-matchers", "~> 7.0"
 end
