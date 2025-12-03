@@ -58,7 +58,7 @@ group :test do
   # FactoryBot for test data generation
   gem "factory_bot_rails", "~> 6.2"
   # Faker for generating fake data
-  gem "faker", "~> 3.0"
+  gem "faker", "~> 3.5"
   # Shoulda matchers for cleaner model specs
   gem "shoulda-matchers", "~> 6.0"
 end
